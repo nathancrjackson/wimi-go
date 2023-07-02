@@ -1,0 +1,22 @@
+name: Build Docker container and push to ACR
+
+on:
+  #Only run manually for now
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v2
+    - uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.ACR_URL }}
+        username: ${{ secrets.ACR_APPID }}
+        password: ${{ secrets.ACR_SECRET }}
+    - run: |
+        docker build . -t ${{ secrets.ACR_URL }}/${{ secrets.ACR_REPO }}:${{ github.sha }}
+        docker push ${{ secrets.ACR_URL }}/${{ secrets.ACR_REPO }}:${{ github.sha }}
