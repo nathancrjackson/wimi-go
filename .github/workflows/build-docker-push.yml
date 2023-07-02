@@ -14,9 +14,9 @@ jobs:
     - uses: actions/checkout@v2
     - uses: azure/docker-login@v1
       with:
-        login-server: ${{ secrets.ACR_URL }}
+        login-server: ${{ env.ACR_URL }}
         username: ${{ secrets.ACR_APPID }}
         password: ${{ secrets.ACR_SECRET }}
     - run: |
-        docker build . -t ${{ secrets.ACR_URL }}/${{ secrets.ACR_REPO }}:${{ github.sha }}
-        docker push ${{ secrets.ACR_URL }}/${{ secrets.ACR_REPO }}:${{ github.sha }}
+        docker build . -t ${{ env.ACR_URL }}/${{ env.ACR_REPO }}:${{ github.sha }}
+        docker push ${{ env.ACR_URL }}/${{ env.ACR_REPO }}:${{ github.sha }}
