@@ -1,4 +1,4 @@
-name: Build Docker container and push to ACR
+name: Linux build for Docker to ACR
 
 on:
   #Only run manually for now
@@ -10,6 +10,7 @@ jobs:
     defaults:
       run:
         shell: bash
+        #working-directory: src
     steps:
     - uses: actions/checkout@v2
     - uses: azure/docker-login@v1
@@ -20,3 +21,5 @@ jobs:
     - run: |
         docker build . -t ${{ vars.ACR_URL }}/${{ vars.ACR_REPO }}:${{ github.sha }}
         docker push ${{ vars.ACR_URL }}/${{ vars.ACR_REPO }}:${{ github.sha }}
+        docker tag ${{ vars.ACR_URL }}/${{ vars.ACR_REPO }}:${{ github.sha }} ${{ vars.ACR_URL }}/${{ vars.ACR_REPO }}:latest
+        docker push ${{ vars.ACR_URL }}/${{ vars.ACR_REPO }}:latest
