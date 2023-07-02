@@ -1,0 +1,45 @@
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Test building on both Linux and Windows
+
+on:
+  #Only run manually for now
+  workflow_dispatch:
+  #push:
+  #  branches: [ "main" ]
+  #pull_request:
+  #  branches: [ "main" ]
+
+jobs:
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.19
+
+    - name: Build
+      run: go build -v ./src/webserver.go
+
+    - name: Test
+      run: go test -v ./src/webserver.go
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.19
+
+    - name: Build
+      run: go build -v ./src/webserver.go
+
+    - name: Test
+      run: go test -v ./src/webserver.go

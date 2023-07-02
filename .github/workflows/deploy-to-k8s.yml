@@ -1,0 +1,19 @@
+name: Redeploy container to Kubernetes cluster
+
+on:
+  #Only run manually for now
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set the Kubernetes context
+        uses: azure/k8s-set-context@v2
+        with:
+          method: service-account
+          k8s-url: ${{ vars.K8S_URL }}
+          k8s-secret: ${{ secrets.K8S_SECRET }}
+
+      - name: Deploy
+        run: kubectl rollout restart deployment ${{ vars.K8S_DEPLOYMENT }} --namespace=${{ vars.K8S_NAMESPACE }}
